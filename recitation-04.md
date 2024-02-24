@@ -36,7 +36,8 @@ To use this function to count words, you'll need to implement your own `map_f` a
 
 4. Assume that a word `w` appears `n` times. What is the **work** and **span** of `word_count_reduce` for this word, assuming a parallel implementation of the `reduce` function?
 
-**Enter answer here**
+Work: The total work done by word_count_reduce for a word that appears n times involves summing up n occurrences. This involves n-1 addition operations. Therefore, the work is O(n).
+Span: Assuming a parallel implementation of the reduce function, the span (the longest path from start to finish) would be O(log n). This is because the parallel reduce algorithm divides the problem in half recursively, leading to a logarithmic depth of recursion.
 
 
 5. Why are we going through all this trouble? Couldn't I just use this function to count words?
@@ -52,7 +53,7 @@ for doc in docs:
 
 What is the problem that prevents us from easily parallelizing this solution?
 
-**Enter answer here**
+The simple for-loop approach to count words (as shown in the provided code snippet) is easy to understand and implement but is inherently sequential. The primary issue that prevents easy parallelization of this solution is the dependency on shared state (the counts dictionary) that must be updated atomically. In a parallel or distributed environment, ensuring that each update to the dictionary does not interfere with others (i.e., causing race conditions) is non-trivial and can significantly complicate the implementation. The map-reduce framework, on the other hand, naturally lends itself to parallelization because it operates on independent chunks of data in the map phase and systematically reduces these chunks in the reduce phase, making it easier to distribute the workload across multiple processors or machines without encountering issues with shared state.
 
 
 ## Part 2: Sentiment analysis
@@ -64,3 +65,5 @@ Finally, we'll adapt our approach above to perform a simple type of sentiment an
 6. Complete the `sentiment_map` function to implement the above idea and test it with `test_sentiment_map`.
 
 7. Since the output here is similar to the word count problem, we will reuse `word_count_reduce` to compute the total number of positive and negative terms in a sequence of documents. Confirm your results work by running `test_sentiment`.
+
+Bingo!
